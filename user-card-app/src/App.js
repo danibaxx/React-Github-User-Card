@@ -1,25 +1,26 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
+import UserCard from './User/UserCard';
+
 import './App.css';
 
 export default class App extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
-      users: []
+      users: {},
     }
   }
 
   componentDidMount() {
-    this.fetchGitUsers()
-  }
-
-  fetchGitUsers = () => {
     axios
       .get('https://api.github.com/users/danibaxx')
       .then(response => {
         console.log('Response', response)
+        this.setState({
+          users: response.data
+        })
       })
       .catch(error => {
         console.log('Error', error)
@@ -29,11 +30,8 @@ export default class App extends Component {
   render() {
     return (
       <div>
-        <h1>{this.state.name}GitHub Usercard:</h1>
-        {this.state.users.map((user) => (
-          <h3>{user}</h3>
-        ))}
-        
+        <h1>GitHub Usercard:</h1>
+        <UserCard users={this.state.users}/>
       </div>
     )
   }
